@@ -21,3 +21,15 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
+
+document.getElementById('form').addEventListener('submit', function(e) {
+  // Evita que la página recargue si haces pruebas
+  // e.preventDefault(); 
+
+  gtag('event', 'formulario_enviado', {
+    'event_category': 'Formulario',
+    'event_label': 'Formulario de contacto',
+    'value': 1
+  });
+});
+
