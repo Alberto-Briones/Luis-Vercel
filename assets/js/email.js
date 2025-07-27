@@ -4,8 +4,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
+    gtag('event', 'formulario_enviado', {
+      'event_category': 'Formulario',
+      'event_label': 'Formulario de contacto',
+      'value': 1
+    });
 
-    btn.textContent = 'Sending...';
+    btn.textContent = 'Cargando...';
 
     const serviceID = 'default_service';      // Reemplaza si usas otro servicio
     const templateID = 'template_m1s7vqb';    // Reemplaza con tu ID de plantilla
@@ -21,15 +26,3 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 });
-
-document.getElementById('form').addEventListener('submit', function(e) {
-  // Evita que la página recargue si haces pruebas
-  // e.preventDefault(); 
-
-  gtag('event', 'formulario_enviado', {
-    'event_category': 'Formulario',
-    'event_label': 'Formulario de contacto',
-    'value': 1
-  });
-});
-
