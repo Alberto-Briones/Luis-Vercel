@@ -27,14 +27,13 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  icons.forEach(icon => {
-    icon.addEventListener('click', function () {
-      const network = this.getAttribute('data-network');
-
-      gtag('event', 'click_red_social', {
-        'event_category': 'Redes Sociales',
-        'event_label': network,
-        'value': 1
+  socialLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      const red = this.className.split(' ')[0]; // "facebook", "instagram", etc.
+      gtag('event', 'redes_sociales', {
+        event_category: 'Interacción',
+        event_label: red,
+        value: 1
       });
     });
   });
