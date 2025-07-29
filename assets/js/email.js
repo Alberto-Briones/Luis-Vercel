@@ -27,12 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  links.forEach(link => {
-      link.addEventListener('click', function () {
+  social-links.forEach(link => {
+      link-links.addEventListener('click', function () {
         const socialNetwork = link.getAttribute('data-social');
 
         gtag('event', 'Red_social', {
-          'event_category': 'Redes Sociales',
+          'event_category': 'Redes sociales',
           'event_label': socialNetwork,
           'social_network': socialNetwork
         });
