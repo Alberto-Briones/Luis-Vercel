@@ -27,15 +27,23 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-    socialLinks.forEach(link => {
-        link.addEventListener('click', function () {
-          const socialNetwork = link.getAttribute('data-social');
+      socialLinks.forEach(link => {
+      link.addEventListener('click', function (e) {
+        e.preventDefault(); // Evita que se vaya inmediatamente
+        const socialNetwork = link.getAttribute('data-social');
+        const href = link.getAttribute('href');
 
-          gtag('event', 'Red_social', {
-            'event_category': 'Redes sociales',
-            'event_label': socialNetwork,
-            'social_network': socialNetwork
-          });
+        // Envía el evento a Google Analytics
+        gtag('event', 'Red_social', {
+          'event_category': 'Redes sociales',
+          'event_label': socialNetwork,
+          'social_network': socialNetwork
         });
+
+        // Redirige después de un pequeño delay (200 ms)
+        setTimeout(() => {
+          window.open(href, '_blank');
+        }, 200);
       });
+    });
   });
