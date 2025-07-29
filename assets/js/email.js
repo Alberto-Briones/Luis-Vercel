@@ -27,20 +27,25 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-      socialLinks.forEach(link => {
+    links.forEach(link => {
       link.addEventListener('click', function (e) {
-        e.preventDefault(); // Evita que se vaya inmediatamente
-        const socialNetwork = link.getAttribute('data-social');
+        e.preventDefault(); // Evita irse antes de enviar el evento
         const href = link.getAttribute('href');
 
-        // Envía el evento a Google Analytics
+        let red = '';
+        if (link.classList.contains('facebook')) red = 'facebook';
+        else if (link.classList.contains('instagram')) red = 'instagram';
+        else if (link.classList.contains('linkedin')) red = 'linkedin';
+        else if (link.classList.contains('github')) red = 'github';
+
+        // Enviar a GA4
         gtag('event', 'Red_social', {
           'event_category': 'Redes sociales',
-          'event_label': socialNetwork,
-          'social_network': socialNetwork
+          'event_label': red,
+          'social_network': red
         });
 
-        // Redirige después de un pequeño delay (200 ms)
+        // Redirigir con pequeño delay para que el evento se registre
         setTimeout(() => {
           window.open(href, '_blank');
         }, 200);
