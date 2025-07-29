@@ -26,31 +26,4 @@ document.addEventListener('DOMContentLoaded', function () {
         alert('Error al enviar: ' + JSON.stringify(err));
       });
   });
-
-
-    links.forEach(link => {
-      link.addEventListener('click', function (e) {
-        e.preventDefault();
-        const href = link.getAttribute('href');
-
-        let red = '';
-        if (link.classList.contains('facebook')) red = 'Facebook';
-        else if (link.classList.contains('instagram')) red = 'Instagram';
-        else if (link.classList.contains('linkedin')) red = 'LinkedIn';
-        else if (link.classList.contains('github')) red = 'GitHub';
-
-        // Enviar evento a Google Analytics 4
-        gtag('event', 'click_red_social', {
-          event_category: 'Redes sociales',
-          event_label: red,
-          social_network: red
-        });
-
-        // Redirigir después de 200ms
-        setTimeout(() => {
-          window.open(href, '_blank');
-        }, 200);
-      });
-    });
-  
-  });
+});
