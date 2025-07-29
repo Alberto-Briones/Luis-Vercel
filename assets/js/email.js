@@ -27,28 +27,30 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
+
     links.forEach(link => {
       link.addEventListener('click', function (e) {
-        e.preventDefault(); // Evita irse antes de enviar el evento
+        e.preventDefault();
         const href = link.getAttribute('href');
 
         let red = '';
-        if (link.classList.contains('facebook')) red = 'facebook';
-        else if (link.classList.contains('instagram')) red = 'instagram';
-        else if (link.classList.contains('linkedin')) red = 'linkedin';
-        else if (link.classList.contains('github')) red = 'github';
+        if (link.classList.contains('facebook')) red = 'Facebook';
+        else if (link.classList.contains('instagram')) red = 'Instagram';
+        else if (link.classList.contains('linkedin')) red = 'LinkedIn';
+        else if (link.classList.contains('github')) red = 'GitHub';
 
-        // Enviar a GA4
-        gtag('event', 'Red_social', {
-          'event_category': 'Redes sociales',
-          'event_label': red,
-          'social_network': red
+        // Enviar evento a Google Analytics 4
+        gtag('event', 'click_red_social', {
+          event_category: 'Redes sociales',
+          event_label: red,
+          social_network: red
         });
 
-        // Redirigir con pequeño delay para que el evento se registre
+        // Redirigir después de 200ms
         setTimeout(() => {
           window.open(href, '_blank');
         }, 200);
       });
     });
+  
   });
