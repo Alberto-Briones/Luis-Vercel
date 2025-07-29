@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const btn = document.getElementById('button');
   const form = document.getElementById('form');
-  const icons = document.querySelectorAll('social-icons');
+  const icons = document.querySelectorAll('social-links a');
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
@@ -27,15 +27,15 @@ document.addEventListener('DOMContentLoaded', function () {
       });
   });
 
-  socialLinks.forEach(link => {
-    link.addEventListener('click', function () {
-      const red = this.className.split(' ')[0]; // "facebook", "instagram", etc.
-      gtag('event', 'redes_sociales', {
-        event_category: 'Interacción',
-        event_label: red,
-        value: 1
+  links.forEach(link => {
+      link.addEventListener('click', function () {
+        const socialNetwork = link.getAttribute('data-social');
+
+        gtag('event', 'click_social_link', {
+          'event_category': 'Redes Sociales',
+          'event_label': socialNetwork,
+          'social_network': socialNetwork
+        });
       });
     });
-  });
-
 });
