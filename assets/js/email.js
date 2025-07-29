@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
       link.addEventListener('click', function () {
         const socialNetwork = link.getAttribute('data-social');
 
-        gtag('event', 'Red Social', {
+        gtag('event', 'Red_social', {
           'event_category': 'Redes Sociales',
           'event_label': socialNetwork,
           'social_network': socialNetwork
