@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const serviceID = 'default_service';      // ID del servicio de envío de correo electrónico
     const templateID = 'template_m1s7vqb';    
 
-    emailjs.sendForm(serviceID, templateID, this)
+    emailjs.sendForm(serviceID, templateID, this) 
       .then(() => {
         btn.textContent = 'Send Email';
         alert('Correo enviado con éxito!');
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
       link.addEventListener('click', function () {
         const socialNetwork = link.getAttribute('data-social');
 
-        gtag('event', 'click_social_link', {
+        gtag('event', 'Red Social', {
           'event_category': 'Redes Sociales',
           'event_label': socialNetwork,
           'social_network': socialNetwork
