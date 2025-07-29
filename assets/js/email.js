@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const btn = document.getElementById('button');
   const form = document.getElementById('form');
-  const icons = document.querySelectorAll('social-links a');
+  const icons = document.querySelectorAll('#social-links a');
 
   form.addEventListener('submit', function (event) {
     event.preventDefault();
