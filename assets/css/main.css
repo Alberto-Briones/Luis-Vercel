@@ -10,12 +10,100 @@
 # Font & Color Variables
 # Help: https://bootstrapmade.com/color-system/
 --------------------------------------------------------------*/
+
+/* Simple/WebGL Fluid Cursor Styles - Solo en Hero Section */
+#fluid-canvas, #fluid-canvas-webgl {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  opacity: 0.85;
+}
+
+/* Asegurar que las siguientes secciones cubran totalmente el canvas del hero */
+#hero { z-index: 1; position: relative; }
+.main .section { position: relative; z-index: 2; background: var(--background-color); }
+
+/* Cursor personalizado solo en hero section */
+#hero {
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+}
+
+
+/* Restore cursor for interactive elements */
+a, button, input, textarea, select, [role="button"], [tabindex] {
+  cursor: pointer !important;
+}
+
+/* Dark mode adjustments for cursor */
+#hero.dark-background #fluid-canvas, #hero.dark-background #fluid-canvas-webgl {
+  opacity: 0.9;
+}
+
+#hero.light-background #fluid-canvas, #hero.light-background #fluid-canvas-webgl {
+  opacity: 0.7;
+}
 /* Fonts */
 :root {
   --default-font: "Roboto",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --heading-font: "Raleway",  sans-serif;
   --nav-font: "Poppins",  sans-serif;
 }
+
+/* -------------------------------------------------------------
+   Scroll micro-animations and helpers (AOS-friendly)
+   ------------------------------------------------------------- */
+/* Disable decorative violet dividers */
+.section-divider{ display:none !important; }
+
+/* Stagger for list items inside .about, .skills, etc. */
+.stagger > li{ opacity: 0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+.stagger.aos-animate > li{ opacity: 1; transform: translateY(0); }
+.stagger > li:nth-child(1){ transition-delay: .05s }
+.stagger > li:nth-child(2){ transition-delay: .12s }
+.stagger > li:nth-child(3){ transition-delay: .18s }
+.stagger > li:nth-child(4){ transition-delay: .24s }
+.stagger > li:nth-child(5){ transition-delay: .30s }
+
+/* Subtle hover in spec lists */
+.about .content ul li:hover, .skills .skill-item:hover{ filter: brightness(1.06); }
+
+/* Projects gentle hover (without changing layout) */
+.projects .project-item{ transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; border:1px solid color-mix(in srgb, var(--default-color), transparent 90%); border-radius: 14px; }
+.projects .project-item:hover{ transform: translateY(-3px); box-shadow: 0 16px 38px rgba(0,0,0,.22); border-color: color-mix(in srgb, var(--accent-color), transparent 70%); }
+
+/* Remove optional neon outline variant */
+.project-card{ box-shadow: none !important; }
+
+/* -------------------------------------------------------------
+   Clean section block (minimalist card) for sections below About
+   ------------------------------------------------------------- */
+.section-block{
+  border-radius: 16px;
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+  box-shadow: 0 12px 34px rgba(0,0,0,.10);
+  padding: 24px;
+}
+@media (max-width: 992px){ .section-block{ padding: 16px; } }
+
+/* Remove timeline violet accents */
+.resume .resume-title{ padding-left: 0; }
+.resume .resume-title::after{ content:none !important; display:none !important; }
+.resume .row::before{ content:none !important; display:none !important; }
+.resume .resume-item{ padding-left: 16px; }
+.resume .resume-item::before{ content:none !important; display:none !important; box-shadow:none !important; }
+
+/* -------------------------------------------------------------
+   Skills as chips (keep existing HTML)
+   ------------------------------------------------------------- */
+.skills .skill-item{ border-radius: 14px; background: color-mix(in srgb, var(--surface-color), transparent 0%); border:1px solid color-mix(in srgb, var(--default-color), transparent 90%); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+.skills .skill-item:hover{ transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.12); }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root { 
@@ -52,9 +140,239 @@
   --contrast-color: #ffffff;
 }
 
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --background-color: #0a0a0a;
+  --default-color: #e0e0e0;
+  --heading-color: #ffffff;
+  --accent-color: #00d4ff;
+  --surface-color: #1a1a1a;
+  --contrast-color: #ffffff;
+  --nav-color: #a8a9b4;
+  --nav-hover-color: #ffffff;
+  --nav-mobile-background-color: #0a0a0a;
+  --nav-dropdown-background-color: #0a0a0a;
+  --nav-dropdown-color: #a8a9b4;
+  --nav-dropdown-hover-color: #ffffff;
+}
+
+[data-theme="dark"] .light-background {
+  --background-color: #1a1a1a;
+  --surface-color: #2a2a2a;
+}
+
+[data-theme="dark"] .dark-background {
+  --background-color: #0a0a0a;
+  --default-color: #e0e0e0;
+  --heading-color: #ffffff;
+  --surface-color: #1a1a1a;
+  --contrast-color: #ffffff;
+}
+
 /* Smooth scroll */
 :root {
   scroll-behavior: smooth;
+}
+
+/*--------------------------------------------------------------
+# Interactive Elements & Animations
+--------------------------------------------------------------*/
+
+/* Scroll indicator */
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: color-mix(in srgb, var(--accent-color), transparent 80%);
+  z-index: 9999;
+}
+
+.scroll-indicator::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 50%));
+  width: var(--scroll-width, 0%);
+  transition: width 0.1s ease;
+}
+
+/* Floating action button */
+.floating-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 20%));
+  border: none;
+  border-radius: 50%;
+  color: var(--contrast-color);
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(20, 157, 221, 0.3);
+  transition: all 0.3s ease;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(100px);
+}
+
+@media (max-width: 576px) {
+  .floating-btn { bottom: 20px; right: 20px; }
+}
+
+.floating-btn.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.floating-btn:hover {
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 15px 35px rgba(20, 157, 221, 0.4);
+}
+
+.floating-btn:active {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Pulse animation for important elements */
+.pulse-animation {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(20, 157, 221, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(20, 157, 221, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(20, 157, 221, 0);
+  }
+}
+
+/* Hover effects for cards */
+.card-hover-effect {
+  transition: all 0.3s ease;
+}
+
+.card-hover-effect:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Gradient text animation */
+/* Reusable animated gradient text (compatible con dark/light) */
+.animated-gradient-text {
+  background-image: linear-gradient(90deg, #40ffaa, #4079ff, #40ffaa, #4079ff, #40ffaa);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+  animation: gradientShift 8s linear infinite;
+}
+
+/* Variante con borde animado opcional (envoltorio) */
+.gradient-text-border {
+  position: relative;
+  display: inline-block;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.gradient-text-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, #40ffaa, #4079ff, #40ffaa, #4079ff, #40ffaa);
+  background-size: 300% 100%;
+  animation: gradientShift 8s linear infinite;
+  z-index: 0;
+}
+
+.gradient-text-border::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  background: var(--background-color);
+  z-index: 1;
+}
+
+#hero .sitename.animated-gradient-text {
+  background-image: linear-gradient(90deg, #40ffaa, #4079ff, #40ffaa, #4079ff, #40ffaa);
+  background-size: 300% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  /* clave: asegurar transparencia aunque la sección fuerce color */
+  color: transparent !important;
+  -webkit-text-fill-color: transparent !important;
+
+  animation: gradientShift 8s linear infinite;
+}
+
+
+/* El texto real va encima para poder ver el relleno degradado */
+.gradient-text-border > .animated-gradient-text {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Loading animation for sections */
+.section-loading {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.6s ease;
+}
+
+.section-loaded {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Custom cursor for interactive elements */
+.interactive-cursor {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.interactive-cursor:hover {
+  transform: scale(1.05);
+}
+
+/* Glow effect for important buttons */
+.glow-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.glow-effect:hover::before {
+  left: 100%;
 }
 
 /*--------------------------------------------------------------
@@ -181,6 +499,7 @@ h6 {
   color: var(--heading-color);
 }
 
+
 .header .social-links {
   margin: 0 0 20px 0;
 }
@@ -244,6 +563,77 @@ h6 {
 .header .header-toggle:hover {
   color: var(--contrast-color);
   background-color: color-mix(in srgb, var(--accent-color) 90%, white 15%);
+}
+
+/*--------------------------------------------------------------
+# Theme Toggle Button
+--------------------------------------------------------------*/
+.theme-toggle-container {
+  margin: 20px 0;
+}
+
+.theme-toggle-btn {
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 20%));
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(20, 157, 221, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.1) rotate(180deg);
+  box-shadow: 0 10px 25px rgba(20, 157, 221, 0.4);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.95);
+}
+
+.theme-toggle-btn i {
+  font-size: 20px;
+  color: var(--contrast-color);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover i {
+  transform: scale(1.2);
+}
+
+/* Animación de pulso para el toggle */
+.theme-toggle-btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:active::before {
+  width: 100%;
+  height: 100%;
+}
+
+/* Efectos específicos para modo oscuro */
+[data-theme="dark"] .theme-toggle-btn {
+  background: linear-gradient(135deg, #00d4ff, color-mix(in srgb, #00d4ff, transparent 20%));
+  box-shadow: 0 5px 15px rgba(0, 212, 255, 0.3);
+}
+
+[data-theme="dark"] .theme-toggle-btn:hover {
+  box-shadow: 0 10px 25px rgba(0, 212, 255, 0.4);
 }
 
 /*--------------------------------------------------------------
@@ -371,6 +761,16 @@ h6 {
   padding: 40px 0;
   position: relative;
   border-top: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+}
+
+/* Footer variant aligned with site dark theme */
+.footer.dark-background {
+  background: linear-gradient(180deg, var(--surface-color) 0%, color-mix(in srgb, var(--background-color), #000 10%) 100%);
+  border-top-color: color-mix(in srgb, var(--default-color), transparent 88%);
+}
+
+.footer.dark-background .copyright p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
 }
 
 .footer .copyright p {
@@ -540,7 +940,7 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Hero Section
+# Hero Section - Modernizado
 --------------------------------------------------------------*/
 .hero {
   width: 100%;
@@ -550,6 +950,7 @@ section,
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .hero img {
@@ -560,61 +961,169 @@ section,
   height: 100%;
   object-fit: cover;
   z-index: 1;
+  filter: brightness(0.7) contrast(1.1);
+  transition: transform 0.3s ease;
+}
+
+.hero:hover img {
+  transform: scale(1.05);
 }
 
 .hero:before {
   content: "";
-  background: color-mix(in srgb, var(--background-color), transparent 70%);
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--background-color), transparent 60%) 0%,
+    color-mix(in srgb, var(--accent-color), transparent 85%) 50%,
+    color-mix(in srgb, var(--background-color), transparent 70%) 100%);
   position: absolute;
   inset: 0;
   z-index: 2;
 }
 
+/* Efecto de partículas animadas */
+.hero:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.2), transparent),
+    radial-gradient(1px 1px at 90px 40px, rgba(255,255,255,0.4), transparent),
+    radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.3), transparent),
+    radial-gradient(2px 2px at 160px 30px, rgba(255,255,255,0.2), transparent);
+  background-repeat: repeat;
+  background-size: 200px 100px;
+  animation: particles 20s linear infinite;
+  z-index: 2;
+  opacity: 0.6;
+}
+
+@keyframes particles {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-100px); }
+}
+
 .hero .container {
   position: relative;
   z-index: 3;
+  text-align: center;
+}
+
+/* Lanyard iframe embed */
+.lanyard-embed {
+  width: 100%;
+  height: 520px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 1200px) {
+  .lanyard-embed { height: 460px; }
+}
+
+@media (max-width: 992px) {
+  .lanyard-embed { height: 400px; }
 }
 
 .hero h2 {
   margin: 0;
   font-size: 64px;
   font-weight: 700;
+  background: linear-gradient(135deg, var(--heading-color) 0%, var(--accent-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  animation: fadeInUp 1s ease-out;
 }
 
 .hero p {
-  margin: 5px 0 0 0;
+  margin: 20px 0 0 0;
   font-size: 26px;
+  font-weight: 500;
+  color: var(--default-color);
+  animation: fadeInUp 1s ease-out 0.3s both;
 }
 
 .hero p span {
   letter-spacing: 1px;
-  border-bottom: 2px solid var(--accent-color);
+  border-bottom: 3px solid var(--accent-color);
+  padding-bottom: 2px;
+  position: relative;
+  display: inline-block;
+}
+
+.hero p span:after {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-color), transparent);
+  animation: underline 2s ease-in-out infinite;
+}
+
+@keyframes underline {
+  0%, 100% { width: 0; }
+  50% { width: 100%; }
 }
 
 .hero .social-links {
-  margin-top: 25px;
+  margin-top: 40px;
+  animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .hero .social-links a {
-  font-size: 24px;
+  font-size: 28px;
   display: inline-block;
-  color: color-mix(in srgb, var(--default-color), transparent 50%);
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
   line-height: 1;
-  margin-right: 20px;
-  transition: 0.3s;
+  margin: 0 15px;
+  transition: all 0.3s ease;
+  padding: 12px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .hero .social-links a:hover {
-  color: var(--accent-color);
+  color: var(--contrast-color);
+  background: var(--accent-color);
+  transform: translateY(-5px) scale(1.1);
+  box-shadow: 0 10px 25px rgba(20, 157, 221, 0.3);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (max-width: 768px) {
   .hero h2 {
-    font-size: 32px;
+    font-size: 42px;
   }
 
   .hero p {
     font-size: 20px;
+  }
+  
+  .hero .social-links a {
+    font-size: 24px;
+    margin: 0 10px;
+    padding: 10px;
   }
 }
 
@@ -648,9 +1157,23 @@ section,
   line-height: 0;
 }
 
-/*--------------------------------------------------------------
-# Stats Section
---------------------------------------------------------------*/
+/* Lanyard iframe embed */
+.lanyard-embed {
+  width: 100%;
+  height: 520px;
+  border: 0;
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 1200px) {
+  .lanyard-embed { height: 460px; }
+}
+
+@media (max-width: 992px) {
+  .lanyard-embed { height: 400px; }
+}
 .stats .stats-item {
   padding: 30px;
   width: 100%;
@@ -682,41 +1205,400 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Skills Section
+# Skills Section - Modernizado
 --------------------------------------------------------------*/
-.skills .progress {
+.skills .skill-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: var(--surface-color);
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 95%);
+}
+
+.skills .skill-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+  border-color: color-mix(in srgb, var(--accent-color), transparent 80%);
+}
+
+.skills .skill-icon {
+  width: 60px;
   height: 60px;
-  display: block;
-  background: none;
-  border-radius: 0;
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 20%));
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
 }
 
-.skills .progress .skill {
+.skills .skill-item:hover .skill-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 10px 20px rgba(20, 157, 221, 0.3);
+}
+
+.skills .skill-icon i {
+  font-size: 24px;
+  color: var(--contrast-color);
+}
+
+.skills .skill-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.skills .skill-name {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--heading-color);
-  padding: 0;
-  margin: 0 0 6px 0;
-  text-transform: uppercase;
-  display: block;
-  font-weight: 600;
-  font-family: var(--heading-font);
+  margin-bottom: 5px;
 }
 
-.skills .progress .skill .val {
-  float: right;
-  font-style: normal;
-}
-
-.skills .progress-bar-wrap {
+.skills .progress {
+  height: 8px;
   background: color-mix(in srgb, var(--default-color), transparent 90%);
-  height: 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
 }
 
 .skills .progress-bar {
-  width: 1px;
-  height: 10px;
-  transition: 0.9s;
-  background-color: var(--accent-color);
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 20%));
+  border-radius: 10px;
+  transition: width 1.5s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
+
+.skills .progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.skills .skill-percentage {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-align: right;
+  margin-top: 5px;
+}
+
+/* Animación de entrada para las habilidades */
+.skills .skill-item {
+  opacity: 0;
+  transform: translateX(-30px);
+  animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.skills .skill-item:nth-child(1) { animation-delay: 0.1s; }
+.skills .skill-item:nth-child(2) { animation-delay: 0.2s; }
+.skills .skill-item:nth-child(3) { animation-delay: 0.3s; }
+.skills .skill-item:nth-child(4) { animation-delay: 0.4s; }
+.skills .skill-item:nth-child(5) { animation-delay: 0.5s; }
+.skills .skill-item:nth-child(6) { animation-delay: 0.6s; }
+.skills .skill-item:nth-child(7) { animation-delay: 0.7s; }
+
+@keyframes slideInLeft {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/*--------------------------------------------------------------
+# Projects Section
+--------------------------------------------------------------*/
+.projects .project-item {
+  background: var(--surface-color);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  height: 100%;
+}
+
+.projects .project-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.projects .project-image {
+  position: relative;
+  overflow: hidden;
+  height: 250px;
+}
+
+.projects .project-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.projects .project-item:hover .project-image img {
+  transform: scale(1.1);
+}
+
+.projects .project-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--accent-color), transparent 20%) 0%,
+    color-mix(in srgb, var(--heading-color), transparent 30%) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.projects .project-item:hover .project-overlay {
+  opacity: 1;
+}
+
+.projects .project-links {
+  display: flex;
+  gap: 15px;
+}
+
+.projects .project-link {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  font-size: 20px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.projects .project-link:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  transform: scale(1.1);
+}
+
+.projects .project-content {
+  padding: 25px;
+}
+
+.projects .project-content h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 15px;
+  color: var(--heading-color);
+}
+
+.projects .project-content p {
+  color: color-mix(in srgb, var(--default-color), transparent 20%);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.projects .project-period {
+  color: var(--accent-color);
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.projects .project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.projects .tech-tag {
+  background: color-mix(in srgb, var(--accent-color), transparent 90%);
+  color: var(--accent-color);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid color-mix(in srgb, var(--accent-color), transparent 70%);
+  transition: all 0.3s ease;
+}
+
+.projects .tech-tag:hover {
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  transform: translateY(-2px);
+}
+
+/*--------------------------------------------------------------
+# Testimonials Section - Modernizado
+--------------------------------------------------------------*/
+.testimonials .testimonials-slider {
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+.testimonials .testimonial-item {
+  text-align: center;
+  min-height: 350px;
+  padding: 30px;
+  background: var(--surface-color);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 95%);
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonials .testimonial-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 50%));
+}
+
+.testimonials .testimonial-item:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.testimonials .testimonial-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  overflow: hidden;
+  border: 4px solid color-mix(in srgb, var(--accent-color), transparent 80%);
+  transition: all 0.3s ease;
+}
+
+.testimonials .testimonial-item:hover .testimonial-img {
+  border-color: var(--accent-color);
+  transform: scale(1.1);
+}
+
+.testimonials .testimonial-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.testimonials .testimonial-item h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 15px 0 5px 0;
+  color: var(--heading-color);
+}
+
+.testimonials .testimonial-item h4 {
+  font-size: 14px;
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  margin: 0 0 15px 0;
+  font-weight: 500;
+}
+
+.testimonials .stars {
+  margin-bottom: 20px;
+}
+
+.testimonials .stars i {
+  color: #ffc107;
+  font-size: 18px;
+  margin: 0 2px;
+  transition: all 0.3s ease;
+}
+
+.testimonials .stars i:hover {
+  transform: scale(1.2);
+}
+
+.testimonials .testimonial-item p {
+  font-style: italic;
+  margin: 0;
+  padding: 20px;
+  background: color-mix(in srgb, var(--background-color), transparent 50%);
+  border-radius: 15px;
+  position: relative;
+  line-height: 1.6;
+  color: color-mix(in srgb, var(--default-color), transparent 10%);
+}
+
+.testimonials .quote-icon-left,
+.testimonials .quote-icon-right {
+  color: color-mix(in srgb, var(--accent-color), transparent 40%);
+  font-size: 24px;
+  line-height: 0;
+}
+
+.testimonials .quote-icon-left {
+  display: inline-block;
+  left: -5px;
+  position: relative;
+}
+
+.testimonials .quote-icon-right {
+  display: inline-block;
+  right: -5px;
+  position: relative;
+  top: 10px;
+  transform: scale(-1, -1);
+}
+
+.testimonials .swiper-pagination {
+  margin-top: 40px;
+  position: relative;
+}
+
+.testimonials .swiper-pagination .swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background-color: color-mix(in srgb, var(--default-color), transparent 70%);
+  opacity: 1;
+  border: 2px solid var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.testimonials .swiper-pagination .swiper-pagination-bullet-active {
+  background-color: var(--accent-color);
+  transform: scale(1.2);
+}
+
+/* Animación de entrada para testimonios */
+.testimonials .testimonial-item {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.testimonials .testimonial-item:nth-child(1) { animation-delay: 0.2s; }
+.testimonials .testimonial-item:nth-child(2) { animation-delay: 0.4s; }
+.testimonials .testimonial-item:nth-child(3) { animation-delay: 0.6s; }
 
 /*--------------------------------------------------------------
 # Resume Section
@@ -729,11 +1611,18 @@ section,
   margin-bottom: 20px;
 }
 
+
+
 .resume .resume-item {
   padding: 0 0 20px 20px;
   margin-top: -2px;
   border-left: 2px solid var(--accent-color);
   position: relative;
+  background: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 92%);
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.08);
+  transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background .25s ease;
 }
 
 .resume .resume-item h4 {
@@ -759,6 +1648,19 @@ section,
 
 .resume .resume-item ul li {
   padding-bottom: 10px;
+}
+
+/* Hover animation for Education/Experience cards */
+.resume .resume-item:hover {
+  transform: translateY(-6px);
+  border-color: color-mix(in srgb, var(--accent-color), transparent 70%);
+  box-shadow: 0 16px 38px rgba(0,0,0,0.18);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--surface-color), transparent 0%) 0%, color-mix(in srgb, var(--surface-color), transparent 10%) 100%);
+}
+
+.resume .resume-item:hover h4,
+.resume .resume-item:hover h5 {
+  color: var(--heading-color);
 }
 
 .resume .resume-item:last-child {
@@ -1141,6 +2043,213 @@ section,
   background: color-mix(in srgb, var(--accent-color), transparent 25%);
 }
 
+/* Extra: Social links block in Contact (extraído de index.html) */
+.social-links-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.social-link-contact {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  background-color: var(--surface-color);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  color: var(--default-color);
+}
+
+.social-link-contact:hover {
+  background-color: color-mix(in srgb, var(--surface-color), var(--accent-color) 6%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+.social-link-contact i {
+  font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+}
+
+.social-link-contact span {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.social-link-contact:first-child { color: #0077b5; }
+.social-link-contact:first-child:hover { background-color: #0077b5; color: #fff; }
+.social-link-contact:last-child { color: #333; }
+.social-link-contact:last-child:hover { background-color: #333; color: #fff; }
+
+/*--------------------------------------------------------------
+# Modern Contact Form Styles
+--------------------------------------------------------------*/
+.modern-form .form-group {
+  position: relative;
+  margin-bottom: 25px;
+}
+
+.modern-form .form-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading-color);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.modern-form .form-label i {
+  margin-right: 8px;
+  color: var(--accent-color);
+  font-size: 16px;
+}
+
+.modern-form .modern-input,
+.modern-form .modern-textarea {
+  width: 100%;
+  padding: 15px 20px;
+  border: 2px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  border-radius: 12px;
+  background: var(--surface-color);
+  color: var(--default-color);
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.modern-form .modern-input:focus,
+.modern-form .modern-textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-color), transparent 90%);
+  transform: translateY(-2px);
+}
+
+.modern-form .modern-input::placeholder,
+.modern-form .modern-textarea::placeholder {
+  color: color-mix(in srgb, var(--default-color), transparent 50%);
+  transition: all 0.3s ease;
+}
+
+.modern-form .modern-input:focus::placeholder,
+.modern-form .modern-textarea:focus::placeholder {
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
+  transform: translateY(-2px);
+}
+
+.modern-form .form-focus-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 50%));
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.modern-form .modern-input:focus + .form-focus-line,
+.modern-form .modern-textarea:focus + .form-focus-line {
+  width: 100%;
+}
+
+.modern-submit-btn {
+  position: relative;
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 20%));
+  color: var(--contrast-color);
+  border: none;
+  padding: 15px 40px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(20, 157, 221, 0.3);
+  min-width: 200px;
+}
+
+.modern-submit-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(20, 157, 221, 0.4);
+}
+
+.modern-submit-btn:active {
+  transform: translateY(-1px);
+}
+
+.modern-submit-btn .btn-text {
+  display: inline-block;
+  transition: all 0.3s ease;
+}
+
+.modern-submit-btn .btn-icon {
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.modern-submit-btn:hover .btn-text {
+  transform: translateX(-10px);
+}
+
+.modern-submit-btn:hover .btn-icon {
+  opacity: 1;
+  transform: translateY(-50%) translateX(-5px);
+}
+
+.modern-submit-btn .btn-loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.modern-submit-btn.loading .btn-text,
+.modern-submit-btn.loading .btn-icon {
+  opacity: 0;
+}
+
+.modern-submit-btn.loading .btn-loading {
+  opacity: 1;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Animación de entrada para el formulario */
+.modern-form .form-group {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp 0.6s ease-out forwards;
+}
+
+.modern-form .form-group:nth-child(1) { animation-delay: 0.1s; }
+.modern-form .form-group:nth-child(2) { animation-delay: 0.2s; }
+.modern-form .form-group:nth-child(3) { animation-delay: 0.3s; }
+.modern-form .form-group:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes slideInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /*--------------------------------------------------------------
 # Portfolio Details Section
 --------------------------------------------------------------*/
@@ -1271,5 +2380,26 @@ section,
 # Starter Section Section
 --------------------------------------------------------------*/
 .starter-section {
-  /* Add your styles here */
+  padding: 60px 0;
+}
+
+/* --- Anti-flicker tweaks for top ribbon and hero overlay --- */
+/* Reduce GPU edge artifacts on animated thin bars and overlays */
+.scroll-indicator,
+.scroll-indicator::before {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* Smooth edges for animated particle overlay to avoid corner triangles */
+.hero:after {
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  animation: none !important; /* stop animation to eliminate flicker */
+}
+
+/* Ensure hero overlays stay below subsequent sections to avoid seam artifacts */
+.hero:before,
+.hero:after {
+  z-index: 1 !important;
 }

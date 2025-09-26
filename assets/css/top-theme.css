@@ -1,0 +1,338 @@
+/* Top Theme: Dark + Violet Glow (scoped, reversible) */
+
+.top-theme {
+  --bg-0: #0b0d13;
+  --bg-1: #0e1118;
+  --surface: #121621;
+  --text: #eaf0ff;
+  --text-dim: rgba(202,213,255,.72);
+  --violet: #a855f7;
+  --indigo: #6366f1;
+  --ring: rgba(168,85,247,.45);
+  --ring-soft: rgba(168,85,247,.28);
+}
+
+/* Global */
+.top-theme{
+  /* fondo negro solicitado para las secciones posteriores al hero */
+  background: #000000;
+  /* Overrides de color para que todo el contenido adopte el tema oscuro púrpura */
+  --background-color: #000000;
+  --surface-color: #0e1118;
+  --default-color: #eaf0ff;
+  --heading-color: #ffffff;
+  --contrast-color: #ffffff;
+}
+.top-theme body.index-page{ color: var(--text); }
+
+.top-theme h1,.top-theme h2,.top-theme h3,.top-theme h4{ color: var(--text); }
+.top-theme p{ color: var(--text-dim); }
+
+/* About > Competencias: texto en blanco para máxima legibilidad */
+.top-theme #about .content ul li,
+.top-theme #about .content ul li span {
+  color: #ffffff !important;
+}
+
+/* Resume: párrafos en blanco para mejor contraste dentro de tarjetas oscuras */
+.top-theme #resume .resume-item p {
+  color: #ffffff !important;
+}
+
+/* Sidebar header tweaks */
+.top-theme .header{ background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.0)); border-right: 1px solid rgba(255,255,255,.06); }
+.top-theme .header .social-links a{ background: rgba(255,255,255,.08); color: var(--text); }
+
+/* Section shell */
+.top-theme .section{ background: transparent; }
+.top-theme .section-title h2{ position: relative; display: inline-block; }
+.top-theme .section-title h2::after{
+  content:""; display:block; height:3px; width:120px; margin-top:10px; border-radius:999px;
+  background: linear-gradient(90deg, var(--violet), var(--indigo)); box-shadow: 0 0 16px var(--ring);
+}
+
+/* Bajar ligeramente toda la sección Skills respecto a la anterior */
+.top-theme #skills{ margin-top: 20px; }
+@media (min-width: 992px){ .top-theme #skills{ margin-top: 28px; } }
+
+/* Content container cards */
+.top-theme #about > .container:not(.section-title),
+.top-theme #skills > .container:not(.section-title),
+.top-theme #projects > .container:not(.section-title),
+.top-theme #resume > .container,
+.top-theme #contact > .container:not(.section-title){
+  position: relative; border-radius: 18px; background: var(--surface-color, var(--surface));
+  /* Bordes violeta SOLO para las tarjetas */
+  border: 1px solid rgba(168,85,247,.6);
+  box-shadow: 0 30px 90px rgba(0,0,0,.45), 0 0 0 1px rgba(168,85,247,.7), 0 0 60px rgba(168,85,247,.45);
+  overflow: hidden; padding: 48px 28px 24px;
+  /* estrechar tarjetas como en referencia (centradas) */
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+  /* Estabilidad de bordes sin máscaras */
+  background-clip: padding-box;
+}
+
+/* Aplicar el mismo suavizado a componentes redondeados frecuentes */
+.top-theme .projects .project-item,
+.top-theme .skills .skill-item,
+.top-theme .testimonials .testimonial-item {
+  /* Estabilidad de bordes sin máscaras */
+  background-clip: padding-box;
+
+}
+
+@media (min-width: 1400px){
+  .top-theme #about > .container:not(.section-title),
+  .top-theme #skills > .container:not(.section-title),
+  .top-theme #projects > .container:not(.section-title),
+  .top-theme #resume > .container,
+  .top-theme #contact > .container:not(.section-title){
+    max-width: 1020px;
+  }
+}
+
+@media (max-width: 991.98px){
+  .top-theme #about > .container:not(.section-title),
+  .top-theme #skills > .container:not(.section-title),
+  .top-theme #projects > .container:not(.section-title),
+  .top-theme #resume > .container,
+  .top-theme #contact > .container:not(.section-title){
+    max-width: 100%;
+    margin-inline: 12px;
+    padding: 36px 16px 16px;
+  }
+}
+
+/* XS/SM: asegurar visibilidad del card y ajustar aro */
+@media (max-width: 576px){
+  .top-theme #about > .container:not(.section-title),
+  .top-theme #skills > .container:not(.section-title),
+  .top-theme #projects > .container:not(.section-title),
+  .top-theme #resume > .container,
+  .top-theme #contact > .container:not(.section-title){
+    border-color: rgba(168,85,247,.80);
+    background-color: #0f1420; /* un poco más claro que el fondo para distinguir */
+    padding: 20px 14px 16px;
+  }
+
+  /* El carrusel: un poco menos alto y con menos margen superior */
+  .top-theme #skills #logo-loop{ height: 520px !important; margin-top: 40px; }
+  .top-theme #skills .logoloop-circular{ margin-top: 28px; }
+}
+
+/* Extra espacio superior para el carrusel de logos y evitar choque con el encabezado */
+.top-theme #skills #logo-loop{ margin-top: 72px; }
+
+@media (min-width: 992px){
+  .top-theme #skills #logo-loop{ margin-top: 96px; }
+}
+
+/* Mover el aro completo hacia abajo independientemente de su propio centrado */
+.top-theme #skills .logoloop-circular{ margin-top: 40px; }
+
+@media (min-width: 992px){
+  .top-theme #skills .logoloop-circular{ margin-top: 56px; }
+}
+
+/* Más espacio bajo el título en Skills (ribbon) */
+.top-theme #skills .ribbon{ margin-bottom: 20px; }
+@media (min-width: 992px){ .top-theme #skills .ribbon{ margin-bottom: 28px; } }
+
+
+
+/* Lanyard frame coherence */
+.top-theme .lanyard-embed{ box-shadow: 0 14px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06); }
+
+/* Lists stagger (works with AOS) */
+.top-theme .stagger > li{ opacity:0; transform: translateY(10px); transition: opacity .6s ease, transform .6s ease; }
+.top-theme .stagger.aos-animate > li{ opacity:1; transform: translateY(0); }
+.top-theme .stagger > li:nth-child(1){ transition-delay:.05s }
+.top-theme .stagger > li:nth-child(2){ transition-delay:.12s }
+.top-theme .stagger > li:nth-child(3){ transition-delay:.18s }
+.top-theme .stagger > li:nth-child(4){ transition-delay:.24s }
+.top-theme .stagger > li:nth-child(5){ transition-delay:.30s }
+
+/* Projects */
+.top-theme .projects .project-item{ border:1px solid rgba(255,255,255,.12); border-radius:14px; background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)); transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; box-shadow: 0 16px 36px rgba(0,0,0,.35); }
+.top-theme .projects .project-item:hover{ transform: translateY(-3px); box-shadow: 0 22px 56px rgba(0,0,0,.45); border-color: rgba(255,255,255,.18); }
+.top-theme .projects .project-card{ box-shadow: 0 0 0 1px var(--ring), 0 0 24px var(--ring-soft); }
+
+/* Resume timeline */
+.top-theme .resume .row{ position: relative; }
+.top-theme .resume .row::before{ content:""; position:absolute; left: 14px; top:0; bottom:0; width:2px; background: linear-gradient(var(--violet), var(--indigo)); filter: drop-shadow(0 0 6px var(--ring)); opacity:.8 }
+.top-theme .resume .resume-item{ position: relative; background: rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 16px 16px 16px 36px; margin-bottom: 18px; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
+.top-theme .resume .resume-item::before{ content:""; position:absolute; left:8px; top:22px; width:12px; height:12px; border-radius:999px; background: var(--violet); box-shadow: 0 0 0 3px rgba(168,85,247,.25), 0 0 14px rgba(168,85,247,.5); }
+.top-theme .resume .resume-title{ position:relative; padding-left:6px; }
+.top-theme .resume .resume-title::after{ content:""; display:block; width: 90px; height: 3px; border-radius:999px; margin-top:8px; background: linear-gradient(90deg, var(--violet), var(--indigo)); box-shadow:0 0 14px var(--ring); }
+
+/* Skills chips */
+.top-theme .skills .skill-item{ border-radius: 14px; background: rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.12); box-shadow: 0 10px 26px rgba(0,0,0,.22); transition: transform .18s ease, box-shadow .18s ease; }
+
+.top-theme .skills .skill-item{ color: #ffffff; }
+
+.top-theme .skills .skill-item:hover{ transform: translateY(-2px); box-shadow: 0 16px 36px rgba(0,0,0,.28); }
+
+/* Skills categories: animated entry and hover glow */
+.top-theme .skills h5{ position:relative; display:inline-block; }
+.top-theme .skills h5::after{
+  content:""; display:block; height:2px; width:72px; margin-top:8px; border-radius:999px;
+  background: linear-gradient(90deg, var(--violet), var(--indigo)); box-shadow: 0 0 10px var(--ring);
+}
+
+/* Entry animation */
+.top-theme .skills .skill-item{
+  opacity: 0; transform: translateY(8px);
+  animation: skillFadeUp .6s ease forwards;
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.22);
+  color: #ffffff !important;
+}
+
+/* Stagger delays within each flex wrap container */
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(1){ animation-delay: .05s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(2){ animation-delay: .10s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(3){ animation-delay: .15s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(4){ animation-delay: .20s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(5){ animation-delay: .25s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(6){ animation-delay: .30s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(7){ animation-delay: .35s }
+.top-theme .skills .d-flex.flex-wrap .skill-item:nth-child(8){ animation-delay: .40s }
+
+@keyframes skillFadeUp {
+  from { opacity:0; transform: translateY(8px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+
+/* Hover glow stronger and gradient edge */
+.top-theme .skills .skill-item:hover{
+  border-color: rgba(168,85,247,.35);
+  box-shadow: 0 0 0 2px rgba(168,85,247,.20), 0 0 18px rgba(168,85,247,.45), 0 16px 36px rgba(0,0,0,.32);
+  background: linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
+}
+
+/* Buttons */
+.top-theme .btn-cta, .top-theme .project-link{
+  display:inline-flex; align-items:center; gap:.5rem; padding:.65rem .9rem; border-radius:.9rem;
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.14); color: var(--text);
+  box-shadow: 0 10px 30px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.06);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.top-theme .btn-cta:hover, .top-theme .project-link:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.2); box-shadow: 0 16px 40px rgba(0,0,0,.35); }
+
+/* Section divider (reuse existing markup) */
+.top-theme .section-divider{ height:4px; width:0; background: linear-gradient(90deg,var(--violet),var(--indigo)); border-radius:999px; box-shadow: 0 0 16px var(--ring); transition: width .9s cubic-bezier(.2,.8,.2,1); }
+.top-theme [data-aos].aos-animate > .section-divider, .top-theme .section-title.aos-animate + .section-divider{ width: 140px; }
+
+/* Contact: forzar estilo oscuro completo */
+.top-theme .contact .info-wrap,
+.top-theme .contact .php-email-form{
+  background-color: var(--surface-color, #0e1118);
+  border: 1px solid rgba(255,255,255,.12);
+  box-shadow: 0 14px 36px rgba(0,0,0,.32);
+}
+.top-theme .contact .info-item i{
+  background: rgba(255,255,255,.12);
+  color: var(--accent-color, #a855f7);
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease, filter .25s ease;
+}
+
+/* Brillo al pasar el cursor */
+.top-theme .contact .info-item:hover i{
+  background: linear-gradient(135deg, var(--accent-color, #a855f7), #7c3aed);
+  color: #0f1420; /* contraste dentro del botón */
+  transform: translateY(-1px) scale(1.06);
+  box-shadow: 0 0 0 3px rgba(168,85,247,.25), 0 0 18px rgba(168,85,247,.55), 0 10px 20px rgba(0,0,0,.35);
+  filter: saturate(1.2);
+}
+.top-theme .contact .php-email-form input[type=text],
+.top-theme .contact .php-email-form input[type=email],
+.top-theme .contact .php-email-form textarea{
+  background-color: #0f1420;
+  border-color: rgba(255,255,255,.16);
+}
+/* Placeholders: texto legible, sin degradados ni brillos */
+.top-theme .contact .php-email-form input[type=text]::placeholder,
+.top-theme .contact .php-email-form input[type=email]::placeholder,
+.top-theme .contact .php-email-form textarea::placeholder{
+  color: #ffffff;
+  background: transparent !important;
+}
+
+/* Botón de enviar: conserva degradado y brillo sutil */
+.top-theme .contact .php-email-form button[type=submit]{
+  background: linear-gradient(135deg, var(--accent-color, #a855f7), #7c3aed);
+  box-shadow: 0 10px 28px rgba(168,85,247,.35);
+  color: #fff;
+}
+
+/* Inputs y textarea: texto claro, sin líneas internas ni brillos molestos */
+.top-theme .contact .php-email-form input[type=text],
+.top-theme .contact .php-email-form input[type=email],
+.top-theme .contact .php-email-form textarea{
+  color: var(--text, #eaf0ff);
+  caret-color: var(--text, #eaf0ff);
+  background-image: none !important;
+}
+
+/* Enfoque: borde y halo discretos en violeta */
+.top-theme .contact .php-email-form input[type=text]:focus,
+.top-theme .contact .php-email-form input[type=email]:focus,
+.top-theme .contact .php-email-form textarea:focus{
+  outline: none;
+  border-color: rgba(168,85,247,.65);
+  box-shadow: 0 0 0 3px rgba(168,85,247,.18);
+}
+
+/* Pegar cinta y rectángulo en una sola pieza */
+.top-theme #about > .container.section-title + .container,
+.top-theme #skills > .container.section-title + .container,
+.top-theme #projects > .section-divider + .container,
+.top-theme #resume > .container,
+.top-theme #contact > .section-divider + .container {
+  margin-top: -2px;            /* une cinta y tarjeta */
+  border-top-left-radius: 0;   /* arriba recto */
+  border-top-right-radius: 0;
+  border-top: none;            /* elimina borde superior */
+}
+
+/* Universal: fusionar cinta y primera tarjeta en todas las secciones */
+.top-theme section > .section-title + .container,
+.top-theme section > .section-title + .section-divider + .container,
+.top-theme section > .section-divider + .container,
+.top-theme .section > .section-title + .container,
+.top-theme .section > .section-title + .section-divider + .container,
+.top-theme .section > .section-divider + .container {
+  margin-top: -2px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+}
+/* Quick fix: force seamless look without touching HTML */
+.top-theme #about > .section-title + .container,
+.top-theme #skills > .section-title + .container,
+.top-theme #resume > .container,
+.top-theme #contact > .section-divider + .container {
+  margin-top: 0 !important;
+}
+
+/* === Remove ribbon entirely === */
+.top-theme .section-title h2::after{ content: none !important; display: none !important; }
+.top-theme .section-divider{ display: none !important; }
+
+/* === Restore card top edge now that ribbon is gone === */
+.top-theme #about > .section-title + .container,
+.top-theme #skills > .section-title + .container,
+.top-theme #projects > .section-divider + .container,
+.top-theme #resume > .container,
+.top-theme #contact > .section-divider + .container{
+  border-top: 1px solid rgba(168,85,247,.6) !important;
+  border-top-left-radius: 18px !important;
+  border-top-right-radius: 18px !important;
+}
+.top-theme .section-divider {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}

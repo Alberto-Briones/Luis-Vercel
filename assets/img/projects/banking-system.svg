@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0f1e"/>
+      <stop offset="100%" stop-color="#142038"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#22d3ee"/>
+      <stop offset="100%" stop-color="#14a3d2"/>
+    </linearGradient>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)"/>
+  <g opacity="0.35">
+    <circle cx="260" cy="220" r="160" fill="#22d3ee" filter="url(#blur)"/>
+    <circle cx="980" cy="600" r="180" fill="#14a3d2" filter="url(#blur)"/>
+  </g>
+  <!-- API/Bank system card -->
+  <g transform="translate(180,160)">
+    <rect x="0" y="0" width="840" height="480" rx="28" fill="#0f172a" stroke="#334155" stroke-width="3"/>
+    <!-- bank building icon -->
+    <g transform="translate(90,90)" stroke="#334155" fill="#0b1220">
+      <polygon points="160,0 320,70 0,70" fill="#0b1220" stroke="#475569"/>
+      <rect x="20" y="70" width="300" height="150" stroke="#475569"/>
+      <rect x="60" y="90" width="40" height="110" fill="#0f172a"/>
+      <rect x="140" y="90" width="40" height="110" fill="#0f172a"/>
+      <rect x="220" y="90" width="40" height="110" fill="#0f172a"/>
+      <rect x="0" y="220" width="340" height="24" fill="#0b1220" stroke="#475569"/>
+    </g>
+    <!-- right side API lines -->
+    <g transform="translate(460,80)" font-family="'Poppins', Arial" font-size="18" fill="#cbd5e1">
+      <rect x="0" y="0" width="280" height="28" rx="6" fill="#0b1220" stroke="#334155"/>
+      <text x="12" y="20">GET /v1/flights</text>
+      <rect x="0" y="48" width="300" height="28" rx="6" fill="#0b1220" stroke="#334155"/>
+      <text x="12" y="68">POST /v1/passengers</text>
+      <rect x="0" y="96" width="260" height="28" rx="6" fill="#0b1220" stroke="#334155"/>
+      <text x="12" y="116">MySQL • Express • Node.js</text>
+      <rect x="0" y="160" width="220" height="28" rx="6" fill="url(#accent)" opacity="0.2"/>
+    </g>
+  </g>
+  <text x="600" y="760" text-anchor="middle" fill="#94a3b8" font-family="'Poppins', Arial" font-size="20">Placeholder de proyecto — Reemplazar por imagen real</text>
+</svg>

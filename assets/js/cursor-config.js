@@ -76,15 +76,37 @@ function setCursorTheme(theme) {
       SPLAT_FORCE: 3000,
       COLOR_UPDATE_SPEED: 5,
       SHADING: false
+    },
+    // Preset inspirado en el estilo de React Bits (valores exactos)
+    reactbits: {
+      SIM_RESOLUTION: 128,
+      DYE_RESOLUTION: 1440,
+      CAPTURE_RESOLUTION: 512,
+      DENSITY_DISSIPATION: 3.5,
+      VELOCITY_DISSIPATION: 2,
+      PRESSURE: 0.1,
+      PRESSURE_ITERATIONS: 20,
+      CURL: 3,
+      SPLAT_RADIUS: 0.2,
+      SPLAT_FORCE: 6000,
+      SHADING: true,
+      COLOR_UPDATE_SPEED: 10,
+      BACK_COLOR: { r: 0.5, g: 0, b: 0 },
+      TRANSPARENT: true,
+      // Controles adicionales para el port a JS
+      INITIAL_SPLASH: false,
+      MULTI_SPLASH: false,
+      COLOR_BOOST: 0.15,
+      FULLSCREEN: false,
+      REACT_PALETTE: true
     }
   };
-  
+
   if (themes[theme]) {
     updateCursorConfig(themes[theme]);
   }
 }
 
-// Función para pausar/reanudar el cursor
 function toggleCursor() {
   if (window.splashCursor) {
     window.splashCursor.config.PAUSED = !window.splashCursor.config.PAUSED;
@@ -106,35 +128,17 @@ function setCursorIntensity(intensity) {
 
 // Auto-detect theme based on hero section class
 function autoDetectTheme() {
-  const heroSection = document.getElementById('hero');
-  if (heroSection) {
-    if (heroSection.classList.contains('dark-background')) {
-      setCursorTheme('dark');
-    } else if (heroSection.classList.contains('light-background')) {
-      setCursorTheme('light');
-    } else {
-      setCursorTheme('vibrant');
-    }
-  }
+  // Forzar el preset de React Bits siempre, como solicitaste
+  setCursorTheme('reactbits');
 }
 
 // Listen for theme changes on hero section
-const observer = new MutationObserver((mutations) => {
-  mutations.forEach((mutation) => {
-    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-      autoDetectTheme();
-    }
-  });
-});
-
-const heroSection = document.getElementById('hero');
-if (heroSection) {
-  observer.observe(heroSection, { attributes: true });
-}
+// Desactivar cambios automáticos por mutación de clases para no sobreescribir reactbits
+// (Si deseas reactivar esta lógica más adelante, podemos añadir un interruptor de configuración.)
 
 // Initialize with default theme
 document.addEventListener('DOMContentLoaded', () => {
-  setTimeout(autoDetectTheme, 1000);
+  autoDetectTheme();
 });
 
 // Export functions for global use
