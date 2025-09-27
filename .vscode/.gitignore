@@ -1,0 +1,24 @@
+# Dependencias
+node_modules/
+.pnp
+.pnp.js
+
+# Builds
+dist/
+build/
+.next/
+.vercel/
+*.map
+
+# Binarios pesados
+*.exe
+*.node
+*.wasm
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
