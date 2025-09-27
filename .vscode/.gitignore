@@ -1,24 +1,24 @@
-# Dependencias
-node_modules/
-.pnp
-.pnp.js
+# dependencies
+/node_modules
 
-# Builds
-dist/
-build/
-.next/
-.vercel/
-*.map
+# production
+/.next
+/out
+/build
+/dist
 
-# Binarios pesados
-*.exe
-*.node
-*.wasm
-
-# Sistema
+# misc
 .DS_Store
-Thumbs.db
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
-# Env
-.env
+# vercel
+.vercel
+
+# local env files
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
