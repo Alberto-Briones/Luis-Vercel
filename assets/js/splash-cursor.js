@@ -802,7 +802,7 @@ class SplashCursor {
         }
       });
       heroSection.addEventListener('touchmove', (e) => {
-        e.preventDefault();
+        // Do not prevent default here to allow page scroll on touch devices
         const rect = heroSection.getBoundingClientRect();
         const touches = e.targetTouches;
         let pointer = this.pointers[0];
@@ -811,7 +811,7 @@ class SplashCursor {
           let posY = this.scaleByPixelRatio(touches[i].clientY - rect.top);
           this.updatePointerMoveData(pointer, posX, posY, pointer.color);
         }
-      });
+      }, { passive: true });
       heroSection.addEventListener('touchend', (e) => {
         const touches = e.changedTouches;
         let pointer = this.pointers[0];

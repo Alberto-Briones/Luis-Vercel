@@ -29,57 +29,6 @@
   <meta name="revisit-after" content="7 days">
   <link rel="canonical" href="https://luis-escorcia.vercel.app/">
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Luis Alberto Escorcia Briones",
-    "jobTitle": "Ingeniero en Sistemas Computacionales",
-    "description": "Ingeniero en Sistemas Computacionales especializado en desarrollo de software, análisis de datos e inteligencia artificial",
-    "url": "https://luis-escorcia.vercel.app/",
-    "image": "https://luis-escorcia.vercel.app/assets/img/1741415000957.jpg",
-    "sameAs": [
-      "https://www.linkedin.com/in/luis-alberto-escorcia-briones-643aaa223/",
-      "https://github.com/Alberto-Briones",
-      "https://www.facebook.com/luisalberto.briones.92",
-      "https://www.instagram.com/luis_alberto__briones/"
-    ],
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Apan",
-      "addressRegion": "Hidalgo",
-      "addressCountry": "México"
-    },
-    "email": "190303949@itesa.edu.mx",
-    "telephone": "+52 5585669739",
-    "alumniOf": {
-      "@type": "EducationalOrganization",
-      "name": "Instituto Tecnológico Superior del Oriente del Estado de Hidalgo (ITESA)"
-    },
-    "knowsAbout": [
-      "Java",
-      "Python",
-      "Power BI",
-      "Oracle SQL",
-      "TensorFlow",
-      "Machine Learning",
-      "Data Analysis",
-      "Web Development",
-      "JavaScript",
-      "HTML",
-      "CSS"
-    ],
-    "hasOccupation": {
-      "@type": "Occupation",
-      "name": "Ingeniero en Sistemas Computacionales",
-      "occupationLocation": {
-        "@type": "Country",
-        "name": "México"
-      }
-    }
-  }
-  </script>
 
   <!-- Favicons -->
   <link href="assets/img/favicon.png" rel="icon">
@@ -660,6 +609,7 @@
                       Tu nombre
                     </label>
                     <input type="text" name="name" id="name" class="form-control modern-input" placeholder="Ingresa tu nombre completo" required=""/>
+                    <span id="name-error" class="error-message"></span>
                     <div class="form-focus-line"></div>
                   </div>
                 </div>
@@ -671,6 +621,7 @@
                       Tu Email
                     </label>
                     <input type="email" name="email" id="email" class="form-control modern-input" placeholder="tu@email.com" required=""/>
+                    <span id="email-error" class="error-message"></span>
                     <div class="form-focus-line"></div>
                   </div>
                 </div>
@@ -682,6 +633,7 @@
                       Asunto
                     </label>
                     <input type="text" name="title" id="title" class="form-control modern-input" placeholder="¿En qué puedo ayudarte?" required=""/>
+                    <span id="title-error" class="error-message"></span>
                     <div class="form-focus-line"></div>
                   </div>
                 </div>
@@ -693,6 +645,7 @@
                       Mensaje
                     </label>
                     <textarea name="message" id="message" class="form-control modern-textarea" rows="6" placeholder="Cuéntame más detalles sobre tu proyecto o consulta..." required=""></textarea>
+                    <span id="message-error" class="error-message"></span>
                     <div class="form-focus-line"></div>
                   </div>
                 </div>
@@ -749,7 +702,6 @@
 
   <!-- Vendor JS Files -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
   <script src="assets/vendor/aos/aos.js"></script>
   <script src="assets/vendor/typed.js/typed.umd.js"></script>
   <script src="assets/vendor/purecounter/purecounter_vanilla.js"></script>

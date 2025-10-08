@@ -203,7 +203,7 @@ a, button, input, textarea, select, [role="button"], [tabindex] {
 /* Floating action button */
 .floating-btn {
   position: fixed;
-  bottom: 30px;
+  bottom: 60px;
   right: 30px;
   width: 60px;
   height: 60px;
@@ -222,7 +222,7 @@ a, button, input, textarea, select, [role="button"], [tabindex] {
 }
 
 @media (max-width: 576px) {
-  .floating-btn { bottom: 20px; right: 20px; }
+  .floating-btn { bottom: 70px; right: 20px; }
 }
 
 .floating-btn.show {
@@ -383,7 +383,7 @@ body {
   background-color: var(--background-color);
   font-family: var(--default-font);
 }
-
+html, body { overflow-x: hidden; }
 a {
   color: var(--accent-color);
   text-decoration: none;
@@ -905,7 +905,8 @@ section,
   color: var(--default-color);
   background-color: var(--background-color);
   padding: 60px 0;
-  overflow: clip;
+  overflow-x: visible;
+  overflow-y: clip;
 }
 
 /*--------------------------------------------------------------

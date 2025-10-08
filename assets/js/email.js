@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
     btn.classList.add('loading');
     btn.querySelector('.btn-text').textContent = 'Enviando...';
 
-    const serviceID = 'default_service';      // ID del servicio de envío de correo electrónico
+    const serviceID = 'service_xqiyvdp';      // ID del servicio de envío de correo electrónico
     const templateID = 'template_m1s7vqb';    
 
     emailjs.sendForm(serviceID, templateID, this) 

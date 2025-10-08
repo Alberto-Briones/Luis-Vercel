@@ -22,7 +22,10 @@
   --default-color: #eaf0ff;
   --heading-color: #ffffff;
   --contrast-color: #ffffff;
+  
 }
+
+
 .top-theme body.index-page{ color: var(--text); }
 
 .top-theme h1,.top-theme h2,.top-theme h3,.top-theme h4{ color: var(--text); }
@@ -99,11 +102,14 @@
   .top-theme #projects > .container:not(.section-title),
   .top-theme #resume > .container,
   .top-theme #contact > .container:not(.section-title){
+    width: 100%;
     max-width: 100%;
-    margin-inline: 12px;
-    padding: 36px 16px 16px;
+    margin: 0;
+    padding: 28px 18px 18px;
+    border-radius: 16px;
   }
 }
+
 
 /* XS/SM: asegurar visibilidad del card y ajustar aro */
 @media (max-width: 576px){

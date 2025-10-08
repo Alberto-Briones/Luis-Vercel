@@ -16,6 +16,7 @@ class LogoLoop {
       scaleOnHover: options.scaleOnHover || false,
       ariaLabel: options.ariaLabel || 'Technology logos',
       className: options.className || '',
+      mode: options.mode || 'circular', // 'circular' | 'linear'
       ...options
     };
     
@@ -36,9 +37,29 @@ class LogoLoop {
     this.init();
   }
 
+  // Estructura alternativa: carrusel horizontal lineal (móvil)
+  createStructureLinear() {
+    const logos = this.getLogos();
+    const items = logos.map((logo, i) => {
+      const isNodeItem = 'node' in logo;
+      const content = isNodeItem ? logo.node : `<img src="${logo.src}" alt="${logo.alt||''}" title="${logo.title||''}" loading="lazy" />`;
+      const label = (isNodeItem ? (logo.ariaLabel || logo.title) : (logo.alt || logo.title)) || 'logo';
+      return `<div class="logoloop-linear__item" role="img" aria-label="${label}">${content}</div>`;
+    }).join('');
+
+    this.container.innerHTML = `
+      <div class="logoloop-linear ${this.options.className}">
+        ${items}
+      </div>
+    `;
+    // Asegurar que el contenedor no tenga una altura fija pensada para el modo circular
+    this.container.style.height = 'auto';
+  }
+
   init() {
-    this.createStructure();
     this.addStyles();
+    // Siempre circular (descartamos lineal en móviles)
+    this.createStructure();
     this.addDragEvents();
     this.startAnimation();
   }
@@ -86,7 +107,17 @@ class LogoLoop {
 
   generateCircularLogos() {
     const logos = this.getLogos();
-    const radius = this.options.radius || 2200; // Radio aún más grande para más separación
+    //const radius = this.options.radius || 2200; // Radio aún más grande para más separación
+    // Ajuste responsive del radio
+let radius;
+if (window.innerWidth <= 480) {
+  radius = this.options.radius || 140; // móviles pequeños
+} else if (window.innerWidth <= 768) {
+  radius = this.options.radius || 190; // tablets
+} else {
+  radius = this.options.radius || 240; // escritorio
+}
+
     const angleStep = (2 * Math.PI) / logos.length;
     
     return logos.map((logo, index) => {
@@ -312,32 +343,52 @@ class LogoLoop {
         display: block;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
-      
+
       @media (max-width: 768px) {
-        .logoloop-circular {
-          width: 430px;
-          height: 430px;
-        }
-        
+        .logoloop-circular { width: 430px; height: 430px; }
         .logoloop__circular-node,
-        .logoloop__circular-item img {
-          width: 60px;
-          height: 60px;
-          font-size: 24px;
-        }
+        .logoloop__circular-item img { width: 60px; height: 60px; font-size: 24px; }
       }
-      
+
+      @media (max-width: 576px) {
+        .logoloop-circular { width: 360px; height: 360px; }
+        .logoloop__circular-node,
+        .logoloop__circular-item img { width: 48px; height: 48px; font-size: 20px; }
+      }
+
+      /* ajustes extra no necesarios: dejamos vacío */
+
       @media (prefers-reduced-motion: reduce) {
         .logoloop__circular-track {
           transform: rotate(0deg) !important;
         }
         
-        .logoloop__circular-item,
+{{ ... }}
         .logoloop__circular-node,
         .logoloop__circular-item img {
           transition: none !important;
         }
       }
+        @media (max-width: 768px) {
+  .logoloop-circular { width: 360px; height: 360px; }
+  .logoloop__circular-node,
+  .logoloop__circular-item img {
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logoloop-circular { width: 280px; height: 280px; }
+  .logoloop__circular-node,
+  .logoloop__circular-item img {
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+}
+
     `;
     document.head.appendChild(style);
   }
@@ -461,8 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (logoContainer && !window.logoLoop) {
           const isPhone = window.matchMedia('(max-width: 576px)').matches;
           const isTablet = window.matchMedia('(min-width: 577px) and (max-width: 991px)').matches;
-          const radius = isPhone ? 220 : (isTablet ? 260 : 301);
+          const radius = isPhone ? 190 : (isTablet ? 240 : 301);
           window.logoLoop = new LogoLoop('logo-loop', {
+            mode: 'circular',
             speed: 80,
             direction: 'left',
             radius,
