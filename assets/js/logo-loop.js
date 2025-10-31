@@ -37,6 +37,79 @@ class LogoLoop {
     this.init();
   }
 
+  // Mostrar/ocultar tooltip para modo lineal
+  showLinearTooltip(text, evt) {
+    if (!this.linearTooltip) return;
+    const span = this.linearTooltip.querySelector('.logoloop-linear-tooltip__text');
+    if (span) span.textContent = text || '';
+    this.linearTooltip.hidden = false;
+    this.positionLinearTooltipAtEvent(evt);
+  }
+
+  hideLinearTooltip() {
+    if (this.linearTooltip) this.linearTooltip.hidden = true;
+  }
+
+  positionLinearTooltipAtEvent(evt) {
+    if (!this.linearTooltip || !this.linearViewport) return;
+    const vpRect = this.linearViewport.getBoundingClientRect();
+    const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+    const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+    const x = clientX - vpRect.left;
+    const y = clientY - vpRect.top;
+    // posicionar arriba del cursor, centrado
+    const offsetY = -16; // subir un poco
+    this.linearTooltip.style.transform = `translate(${Math.max(12, Math.min(vpRect.width-12, x))}px, ${Math.max(12, y+offsetY)}px)`;
+  }
+
+  // Arrastre y scroll para modo lineal
+  addLinearDragEvents() {
+    if (!this.linearViewport || !this.linearTrack) return;
+    let isDown = false; let startX = 0; let startOffset = 0;
+
+    const onDown = (e) => {
+      isDown = true;
+      this._linearPaused = true;
+      this.linearViewport.style.cursor = 'grabbing';
+      startX = (e.touches ? e.touches[0].clientX : e.clientX);
+      startOffset = this._linearX || 0;
+      e.preventDefault();
+      window.addEventListener('pointermove', onMove);
+      window.addEventListener('pointerup', onUp, { once: true });
+    };
+
+    const onMove = (e) => {
+      if (!isDown) return;
+      const x = (e.touches ? e.touches[0].clientX : e.clientX);
+      const dx = x - startX;
+      this._linearX = startOffset + dx;
+      this.linearTrack.style.transform = `translateX(${this._linearX}px)`;
+    };
+
+    const onUp = () => {
+      isDown = false;
+      this.linearViewport.style.cursor = 'grab';
+      // reanudar auto-scroll
+      this._linearPaused = false;
+      window.removeEventListener('pointermove', onMove);
+    };
+
+    this.linearViewport.addEventListener('pointerdown', onDown);
+
+    // Scroll con rueda del mouse (horizontal)
+    this.linearViewport.addEventListener('wheel', (e) => {
+      // Desplaza horizontal con wheel; suaviza multiplicando
+      const delta = (Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX);
+      this._linearPaused = true;
+      this._linearX -= delta * 0.6;
+      this.linearTrack.style.transform = `translateX(${this._linearX}px)`;
+      // reanudar luego de un pequeño timeout
+      clearTimeout(this._wheelResumeTimer);
+      this._wheelResumeTimer = setTimeout(() => { this._linearPaused = false; }, 180);
+      e.preventDefault();
+    }, { passive: false });
+  }
+
   // Estructura alternativa: carrusel horizontal lineal (móvil)
   createStructureLinear() {
     const logos = this.getLogos();
@@ -44,24 +117,74 @@ class LogoLoop {
       const isNodeItem = 'node' in logo;
       const content = isNodeItem ? logo.node : `<img src="${logo.src}" alt="${logo.alt||''}" title="${logo.title||''}" loading="lazy" />`;
       const label = (isNodeItem ? (logo.ariaLabel || logo.title) : (logo.alt || logo.title)) || 'logo';
-      return `<div class="logoloop-linear__item" role="img" aria-label="${label}">${content}</div>`;
+      return `<div class="logoloop-linear__item" role="img" aria-label="${label}" title="${label}" data-tech-name="${label}">${content}</div>`;
     }).join('');
 
     this.container.innerHTML = `
-      <div class="logoloop-linear ${this.options.className}">
-        ${items}
+      <div class="logoloop-linear-viewport ${this.options.className}" style="overflow:hidden;width:100%;padding:6px 8px;cursor:grab;position:relative;">
+        <div class="logoloop-linear-track" id="logoloop-linear-track" style="display:inline-flex;flex-wrap:nowrap;align-items:center;gap:12px;will-change:transform;">
+          ${items}
+          ${items}
+        </div>
+        <div class="logoloop-linear-tooltip" id="logoloop-linear-tooltip" hidden>
+          <span class="logoloop-linear-tooltip__text">Tecnologías</span>
+        </div>
       </div>
     `;
     // Asegurar que el contenedor no tenga una altura fija pensada para el modo circular
     this.container.style.height = 'auto';
+
+    // Referencias para carrusel lineal por transform
+    this.linearViewport = this.container.querySelector('.logoloop-linear-viewport');
+    this.linearTrack = this.container.querySelector('#logoloop-linear-track');
+    this.linearTooltip = this.container.querySelector('#logoloop-linear-tooltip');
+    this._linearX = 0;
+    this._linearLastTs = 0;
+    this.linearSpeed = this.options.linearSpeed || 40; // px/seg
+
+    // Pausa en hover si aplica
+    if (this.options.pauseOnHover) {
+      this.linearViewport.addEventListener('mouseenter', () => this._linearPaused = true);
+      this.linearViewport.addEventListener('mouseleave', () => this._linearPaused = false);
+      this.linearViewport.addEventListener('touchstart', () => this._linearPaused = true, {passive:true});
+      this.linearViewport.addEventListener('touchend', () => this._linearPaused = false);
+    }
+
+    // Soporte de arrastre con mouse/touch y scroll con rueda
+    this.addLinearDragEvents();
+
+    // Tooltips de nombre en hover sobre cada ítem
+    const linearItems = this.container.querySelectorAll('.logoloop-linear__item');
+    linearItems.forEach((el) => {
+      el.addEventListener('mouseenter', (e) => {
+        const name = el.getAttribute('data-tech-name') || el.getAttribute('title') || '';
+        this.showLinearTooltip(name, e);
+        this._linearPaused = true;
+      });
+      el.addEventListener('mousemove', (e) => this.positionLinearTooltipAtEvent(e));
+      el.addEventListener('mouseleave', () => {
+        this.hideLinearTooltip();
+        this._linearPaused = false;
+      });
+      el.addEventListener('touchstart', (e) => {
+        const name = el.getAttribute('data-tech-name') || el.getAttribute('title') || '';
+        this.showLinearTooltip(name, e);
+        setTimeout(() => this.hideLinearTooltip(), 900);
+      }, { passive: true });
+    });
   }
 
   init() {
     this.addStyles();
-    // Siempre circular (descartamos lineal en móviles)
-    this.createStructure();
-    this.addDragEvents();
-    this.startAnimation();
+    if (this.options.mode === 'linear') {
+      this.createStructureLinear();
+      // auto-movimiento horizontal sin mostrar scrollbar
+      this.startLinearAutoScroll();
+    } else {
+      this.createStructure();
+      this.addDragEvents();
+      this.startAnimation();
+    }
   }
   
   createStructure() {
@@ -344,19 +467,60 @@ if (window.innerWidth <= 480) {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
 
-      @media (max-width: 768px) {
-        .logoloop-circular { width: 430px; height: 430px; }
-        .logoloop__circular-node,
-        .logoloop__circular-item img { width: 60px; height: 60px; font-size: 24px; }
+      /* Linear mode: aplicar mismas propiedades visuales que el carrusel circular */
+      .logoloop-linear__item {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        backdrop-filter: blur(15px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
       }
 
-      @media (max-width: 576px) {
-        .logoloop-circular { width: 360px; height: 360px; }
-        .logoloop__circular-node,
-        .logoloop__circular-item img { width: 48px; height: 48px; font-size: 20px; }
+      .logoloop--scale-hover .logoloop-linear__item:hover {
+        transform: scale(1.3);
+        box-shadow: 0 0 0 3px rgba(168,85,247,.25), 0 0 22px rgba(168,85,247,.55), 0 8px 22px rgba(0,0,0,.35);
+        background: rgba(255, 255, 255, 0.22);
+        filter: saturate(1.2);
       }
 
-      /* ajustes extra no necesarios: dejamos vacío */
+      /* Estado seleccionado/enfocado con contorno morado (igual al circular) */
+      .logoloop-linear__item:focus,
+      .logoloop-linear__item:focus-visible,
+      .logoloop-linear__item:active {
+        outline: none;
+        border-color: rgba(168,85,247,.9);
+        box-shadow: 0 0 0 3px rgba(168,85,247,.25), 0 0 22px rgba(168,85,247,.55), 0 8px 22px rgba(0,0,0,.35);
+        background: rgba(255, 255, 255, 0.22);
+      }
+
+      /* Tooltip flotante en modo lineal (similar al tooltip central) */
+      .logoloop-linear-tooltip {
+        position: absolute;
+        top: 0; left: 0;
+        transform: translate(-50%, -50%);
+        background: rgba(0, 0, 0, 0.85);
+        color: white;
+        padding: 10px 16px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        pointer-events: none;
+        z-index: 1000;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+        backdrop-filter: blur(12px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        white-space: nowrap;
+      }
+
+      /* Variante lineal (móvil) */
+      .logoloop-linear { display:flex; align-items:center; gap:12px; overflow-x:auto; padding:6px 8px; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; }
+      .logoloop-linear__item { flex:0 0 auto; width:56px; height:56px; border-radius:12px; background:rgba(255,255,255,0.08); display:inline-flex; align-items:center; justify-content:center; border:1px solid rgba(255,255,255,0.18); box-shadow:0 6px 18px rgba(0,0,0,0.25); scroll-snap-align:center; }
+      .logoloop-linear__item img, .logoloop-linear__item iconify-icon { max-width:36px; max-height:36px; }
+
+      @media (max-width: 768px) { .logoloop-circular { width: 430px; height: 430px; } .logoloop__circular-node, .logoloop__circular-item img { width: 60px; height: 60px; font-size: 24px; } }
+      @media (max-width: 576px) { .logoloop-circular { width: 360px; height: 360px; } .logoloop__circular-node, .logoloop__circular-item img { width: 48px; height: 48px; font-size: 20px; } }
 
       @media (prefers-reduced-motion: reduce) {
         .logoloop__circular-track {
@@ -485,6 +649,37 @@ if (window.innerWidth <= 480) {
     
     this.animationId = requestAnimationFrame(animate);
   }
+
+  // Movimiento continuo para modo lineal (sin mostrar scrollbar)
+  startLinearAutoScroll() {
+    if (!this.linearTrack) return;
+
+    const track = this.linearTrack;
+    const computeSetWidth = () => track.scrollWidth / 2; // duplicamos items
+    let setWidth = computeSetWidth();
+
+    const step = (ts) => {
+      if (!this._linearLastTs) this._linearLastTs = ts;
+      const dt = Math.max(0, ts - this._linearLastTs) / 1000; // segundos
+      this._linearLastTs = ts;
+
+      if (!this._linearPaused) {
+        const speed = this.linearSpeed || 40; // px/seg
+        this._linearX = (this._linearX || 0) - speed * dt;
+        // wrap infinito al completar una tanda
+        if (Math.abs(this._linearX) >= setWidth) {
+          this._linearX = 0;
+          setWidth = computeSetWidth();
+        }
+        track.style.transform = `translateX(${this._linearX}px)`;
+      }
+
+      this._linearRaf = requestAnimationFrame(step);
+    };
+
+    cancelAnimationFrame(this._linearRaf);
+    this._linearRaf = requestAnimationFrame(step);
+  }
   
   stopAnimation() {
     if (this.animationId) {
@@ -514,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const isTablet = window.matchMedia('(min-width: 577px) and (max-width: 991px)').matches;
           const radius = isPhone ? 190 : (isTablet ? 240 : 301);
           window.logoLoop = new LogoLoop('logo-loop', {
-            mode: 'circular',
+            mode: isPhone ? 'linear' : 'circular',
             speed: 80,
             direction: 'left',
             radius,

@@ -123,9 +123,17 @@
     padding: 20px 14px 16px;
   }
 
-  /* El carrusel: un poco menos alto y con menos margen superior */
-  .top-theme #skills #logo-loop{ height: 520px !important; margin-top: 40px; }
-  .top-theme #skills .logoloop-circular{ margin-top: 28px; }
+  /* Mobile: eliminar espacio entre lenguajes y carrusel */
+  .top-theme #skills #logo-loop{ height: 200px !important; margin-top: 0 !important; }
+  .top-theme #skills .logoloop-circular{ margin-top: 0 !important; }
+  /* Si la fila envolvente usa utilidades de margin (ej. mb-5), neutralizar en móvil */
+  .top-theme #skills .mb-5{ margin-bottom: 0 !important; }
+
+  /* Compactar la fila de íconos en móvil (modo lineal) */
+  .logoloop-linear-viewport{ padding: 8px 12px !important; }
+  .logoloop-linear-track{ gap: 16px !important; }
+  .logoloop-linear__item{ width: 64px !important; height: 64px !important; border-radius: 50% !important; }
+  .logoloop-linear__item img, .logoloop-linear__item iconify-icon{ max-width: 40px !important; max-height: 40px !important; }
 }
 
 /* Extra espacio superior para el carrusel de logos y evitar choque con el encabezado */
